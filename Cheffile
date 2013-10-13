@@ -6,5 +6,6 @@ site 'http://community.opscode.com/api/v1'
 cookbook 'apt'
 cookbook 'apache2'
 cookbook 'mongodb'
+
 cookbook 'nodejs',
-  :git => 'http://github.com/mdxp/nodejs-cookbook'
+  :git => 'http://github.com/ronocdh/nodejs-cookbook'
