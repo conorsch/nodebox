@@ -5,28 +5,55 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "raring64"
-  config.vm.hostname = "nodebox"
+  config.vm.provider :aws do |aws, override|
 
-  # Enable vagrant-cachier support, so packages aren't downloaded for every provisioning.
-  config.cache.auto_detect = true
-  config.cache.enable :apt
-  config.cache.enable :chef
+    # We need a box to base this image on, so point Vagrant to a dummy one.
+    config.vm.box = "dummy-aws"
+    config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
-  # Canonical builds nightly Vagrant images for Ubuntu: http://cloud-images.ubuntu.com/vagrant/
-  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+    # Make sure these environment variables are populated in the host OS 
+    # (i.e. the machine deploying the VM).
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
 
-  config.vm.network :forwarded_port, guest: 80, host: 7777
-  config.vm.network :forwarded_port, guest: 7777, host: 7777
+    # Set these security options in the EC2 Console
+    aws.security_groups = [ 'vagrant' ]
+    aws.keypair_name = "vagrant-aws"
 
-  config.vm.network :private_network, ip: "192.168.33.10"
+    # The EC2 Free Tier isn't eligible for default micro instances, only smalls.
+    # aws.instance_type = "t1.micro"
 
-  # config.vm.synced_folder "../data", "/vagrant_data"
+    # Canonical maintains an index for EC3 images: http://cloud-images.ubuntu.com/locator/ec2/
+    # us-east-1 raring 13.04 amd64 instance-store ami-ad83d7c4
+    aws.ami = "ami-ad83d7c4"
+    aws.region = "us-east-1"
 
-  config.vm.provider :virtualbox do |vb|
+  end
+
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.box = "raring64"
+    override.vm.hostname = "nodebox"
+
+    # Enable vagrant-cachier support, so packages aren't downloaded for every provisioning.
+    config.cache.auto_detect = true
+    config.cache.enable :apt
+    config.cache.enable :chef
+
+    # Canonical builds nightly Vagrant images for Ubuntu: http://cloud-images.ubuntu.com/vagrant/
+    config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+
+    config.vm.network :forwarded_port, guest: 80, host: 7777
+    config.vm.network :forwarded_port, guest: 7777, host: 7777
+
+    config.vm.network :private_network, ip: "192.168.33.10"
+
     vb.customize ["modifyvm", :id, "--memory", "1024"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
+
   end
+
+  # config.vm.synced_folder "../data", "/vagrant_data"
 
   config.vm.provision :chef_solo do |chef|
 
@@ -55,7 +82,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   sudo aptitude install -y ffmpeg
   cd /vagrant && npm install
   /usr/bin/mongod  --port 27017 --dbpath /var/lib/mongodb --logpath /var/log/mongodb/mongodb.log --smallfiles &
-  cd /vagrant && node . &
+  cd /vagrant && node .
 SCRIPT
 
   config.vm.provision "shell", inline: $script
