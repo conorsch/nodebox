@@ -31,11 +31,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
 
     chef.cookbooks_path = "cookbooks"
+    chef.add_recipe "mongodb"
     chef.add_recipe "nodejs::install_from_binary"
     chef.add_recipe "nodejs::npm"
 
-    # As the time of this writing, v0.10.20 was current. 
-    # If you want to use a newer version, update the values below.
+    # At the time of this writing, node v0.10.20 was current. 
+    # If you want to use a newer version of node, update the values below.
     # The checksums are here: http://nodejs.org/dist/v0.10.20/SHASUMS256.txt
     chef.json = { 
         :nodejs => { 
@@ -50,9 +51,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   $script = <<SCRIPT
   echo 'Checking package dependencies for subsonic2...'
-  sudo aptitude install -y ffmpeg mongodb
+  locale-gen en_US.UTF-8
+  sudo aptitude install -y ffmpeg
   cd /vagrant && npm install
-  node .
+  /usr/bin/mongod  --port 27017 --dbpath /var/lib/mongodb --logpath /var/log/mongodb/mongodb.log --smallfiles &
+  cd /vagrant && node . &
 SCRIPT
 
   config.vm.provision "shell", inline: $script
