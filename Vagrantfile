@@ -1,12 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "raring64"
+  config.vm.hostname = "nodebox"
+
+  # Enable vagrant-cachier support, so packages aren't downloaded for every provisioning.
+  config.cache.auto_detect = true
+  config.cache.enable :apt
+  config.cache.enable :chef
 
   # Canonical builds nightly Vagrant images for Ubuntu: http://cloud-images.ubuntu.com/vagrant/
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
@@ -26,19 +31,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
 
     chef.cookbooks_path = "cookbooks"
-    chef.add_recipe = "apt"
     chef.add_recipe "nodejs::install_from_binary"
     chef.add_recipe "nodejs::npm"
+
+    # As the time of this writing, v0.10.20 was current. 
+    # If you want to use a newer version, update the values below.
+    # The checksums are here: http://nodejs.org/dist/v0.10.20/SHASUMS256.txt
     chef.json = { 
         :nodejs => { 
-        :version => "0.10.20",
-      }
+          :version => "0.10.20",
+          :checksum_linux_x64 => "eaebfc66d031f3b5071b72c84dd74f326a9a3c018e14d5de7d107c4f3a36dc96",
+          :checksum_linux_x86 => "4dc94e7de766523f6427b9de75dd3e4f1d3d15d01464e03d98f9c96e09769746",
+        }
+    #    :npm => { version => "1.3.5" }
     }
 
   end
 
   $script = <<SCRIPT
-  echo Checking package dependencies for subsonic2...
+  echo 'Checking package dependencies for subsonic2...'
   sudo aptitude install -y ffmpeg mongodb
   cd /vagrant && npm install
   node .
