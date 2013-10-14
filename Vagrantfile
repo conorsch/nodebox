@@ -16,13 +16,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.access_key_id = ENV['AWS_ACCESS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+    override.ssh.username = "ubuntu"
 
     # Set these security options in the EC2 Console
     aws.security_groups = [ 'vagrant' ]
     aws.keypair_name = "vagrant-aws"
 
-    # The EC2 Free Tier isn't eligible for default micro instances, only smalls.
-    # aws.instance_type = "t1.micro"
+    # Specify the instance type here, e.g. [ "t1.micro", "t1.small", "t1.large" ]
+    aws.instance_type = "t1.micro"
 
     # Canonical maintains an index for EC3 images: http://cloud-images.ubuntu.com/locator/ec2/
     # us-east-1 raring 13.04 amd64 instance-store ami-ad83d7c4
