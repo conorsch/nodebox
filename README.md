@@ -18,8 +18,8 @@ If those commands showed a permissions error, you should set up
 a local installation path for Ruby gems. See [this how-to](http://jbowes.wordpress.com/2008/05/13/installing-ruby-gems-in-your-home-directory/).
 
 If you receive the error "NotImplementedError: C extension support is not enabled. Pass -Xcext.enabled=true to JRuby or set JRUBY_OPTS or modify .jrubyrc to enable." while attempting to install librarian-chef, either:
-+ create ~/.jrubyrc and add the line: cext.enabled=true
-+ add: cext.enabled=true to your existing ~/.jrubyrc
++ create ~/.jrubyrc and add the line: `cext.enabled=true`
++ add: `cext.enabled=true` to your existing ~/.jrubyrc
 
 ## 
 Next, you'll need to pull down the configuration scripts that will 
