@@ -52,6 +52,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ["modifyvm", :id, "--memory", "1024"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
 
+    # For desktop notifications testing
+    vb.gui = true
+
   end
 
   # config.vm.synced_folder "../data", "/vagrant_data"
