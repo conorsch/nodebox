@@ -58,11 +58,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      ansible.verbose = "extra"
   end
 
-  $script = <<SCRIPT
-  locale-gen en_US.UTF-8
-  sudo aptitude install -y npm
-SCRIPT
-
-  config.vm.provision "shell", inline: $script
-
 end
