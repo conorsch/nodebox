@@ -1,6 +1,12 @@
 ---
+- hosts: all
+  user: vagrant
+  sudo: yes
+
 - hosts: nodebox  
 
   tasks:
 
+    - include: apt/tasks/main.yml
     - include: nodejs/tasks/main.yml
+

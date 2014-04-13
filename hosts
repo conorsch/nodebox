@@ -1,5 +1,2 @@
-[local]
-localhost
-
 [nodebox]
-192.168.33.10
+localhost:2222
