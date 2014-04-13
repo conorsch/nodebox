@@ -5,20 +5,24 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
+  # Silly but effective syntax for overriding "[default]" box name
+  config.vm.define :nodebox do |t|
+  end
+
   config.vm.provider :virtualbox do |vb, override|
-    override.vm.box = "raring64"
+    override.vm.box = "saucy64"
     override.vm.hostname = "nodebox"
 
     # Canonical builds nightly Vagrant images for Ubuntu: http://cloud-images.ubuntu.com/vagrant/
-    config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
+    config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
     config.vm.network :forwarded_port, guest: 80, host: 7777
     config.vm.network :forwarded_port, guest: 7777, host: 7777
 
     config.vm.network :private_network, ip: "192.168.33.10"
 
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
+    # vb.customize ["modifyvm", :id, "--memory", "1024"]
+    # vb.customize ["modifyvm", :id, "--cpus", "2"]
 
   end
 
