@@ -1,0 +1,28 @@
+- hosts: webserver  
+
+  tasks:
+
+    - name: create custom user account
+      user:
+        name={{ user }}
+        home={{ home }}
+        state=present
+        shell=/bin/bash
+        groups=admin
+      sudo: yes
+
+    - name: update apt cache
+      apt: update_cache=yes cache_valid_time=3600
+      sudo: yes
+
+    - name: generate locale
+      command: locale-gen en_US.UTF-8
+      sudo: yes
+
+    - name: install packages
+      apt: pkg={{ item }} state=latest
+      sudo: yes
+      with_items:
+        - build-essential
+        - git
+        - tree
