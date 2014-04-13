@@ -8,10 +8,10 @@
     apt: pkg=nodejs update_cache=yes
     tags: nodejs
 
- - name: Node.js | Install packages
-   npm: name=$item global=yes
-   with_items:
-     - yo
-     - grunt-cli
-     - bower
-   tags: nodejs
+  - name: Node.js | Install packages
+    npm: name=$item global=yes
+    with_items:
+      - yo
+      - grunt-cli
+      - bower
+    tags: nodejs
