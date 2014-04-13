@@ -58,7 +58,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :ansible do |ansible|
 
      ansible.playbook = "playbook.xml"
-     ansible.inventory_file = "hosts" 
+     ansible.inventory_path = "hosts"
      ansible.host_key_checking = false
      ansible.verbose = "extra"
      ansible.sudo = true
