@@ -1,7 +1,7 @@
 ---
 # lifted from https://github.com/chriszarate/ansible-playbooks/
   - name: APT | Install prerequisites
-    apt: pkg=$item update_cache=yes
+    apt: pkg={{item}} update_cache=yes
     sudo: yes
     with_items:
       - python-software-properties

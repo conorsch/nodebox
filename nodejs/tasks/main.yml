@@ -9,7 +9,7 @@
     tags: nodejs
 
   - name: Node.js | Install packages
-    npm: name=$item global=yes
+    npm: name={{item}} global=yes
     with_items:
       - yo
       - grunt-cli
