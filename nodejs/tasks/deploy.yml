@@ -1,0 +1,5 @@
+---
+# lifted from to https://github.com/chriszarate/ansible-playbooks
+  - name: Node.js | Create srv directory
+    file: path={{srv_dir}} state=directory 
+    tags: nodejs

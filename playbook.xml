@@ -4,9 +4,11 @@
   sudo: yes
 
 - hosts: nodebox  
+  vars_files: ["ansible_vars"]
 
   tasks:
 
     - include: apt/tasks/main.yml
     - include: nodejs/tasks/main.yml
+    - include: nodejs/tasks/deploy.yml
 
