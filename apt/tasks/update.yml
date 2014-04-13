@@ -1,0 +1,7 @@
+---
+# lifted from https://github.com/chriszarate/ansible-playbooks/
+  - name: APT | Upgrade base packages
+    apt: upgrade=safe
+    sudo: yes
+    tags: apt update
+
