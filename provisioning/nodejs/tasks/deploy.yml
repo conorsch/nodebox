@@ -1,5 +1,19 @@
 ---
-# lifted from to https://github.com/chriszarate/ansible-playbooks
   - name: Node.js | Create srv directory
-    file: path={{srv_dir}} state=directory 
+    file: path={{srv_dir}} state=directory
+    tags: nodejs
+
+  - name: Node.js | Deploy dummy "Hello World" app
+    template: src=../templates/dummy-app.js dest={{app_path}} mode=0644
+    tags: nodejs
+
+  - name: Node.js | Check list of Node.js apps running.
+    command: forever list
+    register: forever_list
+    changed_when: false
+    tags: nodejs
+
+  - name: Node.js | Start dummy "Hello World" app with forever
+    command: forever start {{app_path}}
+    when: "forever_list.stdout.find('{{app_path}}') == -1"
     tags: nodejs

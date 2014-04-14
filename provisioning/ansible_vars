@@ -1,2 +1,4 @@
 ---
 srv_dir: /usr/srv/www/nodejs
+app_path: "{{srv_dir}}/app.js"
+node_port: 7777
