@@ -1,2 +1,3 @@
 ---
 srv_dir: /usr/srv/www/nodejs
+node_port: 7777
