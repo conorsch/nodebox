@@ -23,7 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # vb.customize ["modifyvm", :id, "--memory", "1024"]
     # vb.customize ["modifyvm", :id, "--cpus", "2"]
-
   end
 
   config.vm.provider :aws do |aws, override|
@@ -50,11 +49,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # us-east-1 raring 13.04 amd64 instance-store ami-ad83d7c4
     aws.ami = "ami-ad83d7c4"
     aws.region = "us-east-1"
-
   end
 
-  # config.vm.synced_folder "../data", "/vagrant_data"
-  #
   config.vm.provision :ansible do |ansible|
 
      ansible.playbook = "provisioning/playbook.xml"
@@ -63,5 +59,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      ansible.verbose = "extra"
      ansible.sudo = true
   end
-
 end
