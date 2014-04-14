@@ -1,5 +1,8 @@
 ---
-# lifted from to https://github.com/chriszarate/ansible-playbooks
   - name: Node.js | Create srv directory
-    file: path={{srv_dir}} state=directory 
+    file: path={{srv_dir}} state=directory
+    tags: nodejs
+
+  - name: Node.js | Deploy dummy "Hello World" app
+    template: src=../templates/dummy-app.js dest={{app_path}} mode=0644
     tags: nodejs
