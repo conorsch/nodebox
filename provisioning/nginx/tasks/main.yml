@@ -1,0 +1,24 @@
+---
+# Lifted from https://github.com/chriszarate/ansible-playbooks/
+  - name: nginx | Install nginx
+    apt: pkg=nginx update_cache=yes
+    tags: nginx
+
+  - name: nginx | Delete default vhost
+    file: path=/etc/nginx/sites-enabled/default state=absent
+    when: delete_default_vhost
+    notify:
+      - restart nginx
+    tags: nginx
+
+  - name: nginx | Add nginx "{{project_name}}" vhost
+    template: src="../templates/nodejs-default-vhost" dest="/etc/nginx/sites-available/{{project_name}}"
+    notify:
+      - restart nginx
+    tags: nginx
+
+  - name: nginx | Link nginx "{{project_name}}" vhost in sites-enabled
+    file: src=/etc/nginx/sites-available/{{project_name}} dest=/etc/nginx/sites-enabled/{{project_name}} state=link
+    notify:
+      - restart nginx
+    tags: nginx

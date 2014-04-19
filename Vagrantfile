@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
+Vagrant.require_version ">= 1.5.2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -16,9 +17,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Canonical builds nightly Vagrant images for Ubuntu: http://cloud-images.ubuntu.com/vagrant/
     config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
-    config.vm.network :forwarded_port, guest: 80, host: 7777
-    config.vm.network :forwarded_port, guest: 7777, host: 7777
-
+    # The host port is also specified as {{app_port}} in ansible_vars, so make sure 
+    # to change it there, too.
+    config.vm.network :forwarded_port, guest: 80, host: 8001
     config.vm.network :private_network, ip: "192.168.33.10"
 
     # vb.customize ["modifyvm", :id, "--memory", "1024"]
