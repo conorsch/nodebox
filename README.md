@@ -29,7 +29,6 @@ Needs much more testing
 
 To Do
 =====
-* add nginx reverse proxy
 * AWS support
   * SSH access
   * read EC2 ENV vars
